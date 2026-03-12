@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom'
 import { useCharges } from '@/hooks/useCharges'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -59,6 +60,7 @@ export default function Payments() {
     dateRange,
     setDateRange,
   } = useCharges()
+  const navigate = useNavigate()
 
   return (
     <div className="p-8">
@@ -120,7 +122,11 @@ export default function Payments() {
                 </TableRow>
               ) : (
                 charges.map((charge) => (
-                  <TableRow key={charge.id} className="cursor-pointer hover:bg-muted/50">
+                  <TableRow
+                    key={charge.id}
+                    className="cursor-pointer hover:bg-muted/50"
+                    onClick={() => navigate(`/payments/${charge.id}`)}
+                  >
                     <TableCell>
                       {new Date(charge.createdAt * 1000).toLocaleDateString('es-ES', {
                         day: '2-digit',

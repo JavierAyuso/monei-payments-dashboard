@@ -1,4 +1,5 @@
-import { useNavigate } from 'react-router-dom'
+import { useEffect } from 'react'
+import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useCharges } from '@/hooks/useCharges'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -22,6 +23,7 @@ import {
 } from '@/components/ui/select'
 import { DateRangePicker } from '@/components/DateRangePicker'
 import type { ChargeStatus } from '@/types/charge'
+import { formatCurrency } from '@/lib/utils'
 
 const statusVariant: Record<ChargeStatus, 'default' | 'secondary' | 'destructive' | 'outline'> = {
   SUCCEEDED: 'default',
@@ -29,6 +31,7 @@ const statusVariant: Record<ChargeStatus, 'default' | 'secondary' | 'destructive
   CANCELED: 'secondary',
   EXPIRED: 'outline',
   REFUNDED: 'secondary',
+  PARTIALLY_REFUNDED: 'secondary',
   AUTHORIZED: 'default',
   PENDING: 'outline',
 }
@@ -39,17 +42,21 @@ const statusLabel: Record<ChargeStatus, string> = {
   CANCELED: 'Cancelado',
   EXPIRED: 'Expirado',
   REFUNDED: 'Reembolsado',
+  PARTIALLY_REFUNDED: 'Reembolso parcial',
   AUTHORIZED: 'Autorizado',
   PENDING: 'Pendiente',
 }
 
 export default function Payments() {
+  const [searchParams, setSearchParams] = useSearchParams()
+  const rawPage = Number(searchParams.get('page'))
+  const page = isNaN(rawPage) || rawPage < 1 ? 1 : rawPage
+
   const {
     charges,
     total,
     loading,
     error,
-    page,
     totalPages,
     hasNextPage,
     hasPrevPage,
@@ -59,8 +66,17 @@ export default function Payments() {
     setStatusFilter,
     dateRange,
     setDateRange,
-  } = useCharges()
+  } = useCharges(page)
+
   const navigate = useNavigate()
+
+  useEffect(() => {
+    if (isNaN(rawPage) || rawPage < 1) {
+      setSearchParams({ page: '1' }, { replace: true })
+    } else if (totalPages > 0 && rawPage > totalPages) {
+      setSearchParams({ page: String(totalPages) }, { replace: true })
+    }
+  }, [totalPages])
 
   return (
     <div className="p-8">
@@ -86,6 +102,7 @@ export default function Payments() {
             <SelectItem value="CANCELED">Cancelado</SelectItem>
             <SelectItem value="EXPIRED">Expirado</SelectItem>
             <SelectItem value="REFUNDED">Reembolsado</SelectItem>
+            <SelectItem value="PARTIALLY_REFUNDED">Reembolso parcial</SelectItem>
           </SelectContent>
         </Select>
         <DateRangePicker from={dateRange.from} to={dateRange.to} onChange={setDateRange} />
@@ -137,9 +154,7 @@ export default function Payments() {
                       })}
                     </TableCell>
                     <TableCell className="font-mono text-xs">{charge.orderId ?? '—'}</TableCell>
-                    <TableCell>
-                      {(charge.amount / 100).toFixed(2)} {charge.currency}
-                    </TableCell>
+                    <TableCell>{formatCurrency(charge.amount, charge.currency)}</TableCell>
                     <TableCell className="capitalize">
                       {charge.paymentMethod?.method ?? '—'}
                     </TableCell>
@@ -156,7 +171,7 @@ export default function Payments() {
 
           <div className="mt-4 flex items-center justify-between">
             <p className="text-sm text-muted-foreground">
-              Página {page + 1} de {totalPages}
+              Página {page} de {totalPages}
             </p>
             <div className="flex gap-2">
               <Button variant="outline" size="sm" onClick={goToPrevPage} disabled={!hasPrevPage}>

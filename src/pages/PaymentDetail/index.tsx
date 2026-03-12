@@ -8,6 +8,7 @@ import { Separator } from '@/components/ui/separator'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import type { ChargeStatus } from '@/types/charge'
+import { formatCurrency } from '@/lib/utils'
 
 const statusVariant: Record<ChargeStatus, 'default' | 'secondary' | 'destructive' | 'outline'> = {
   SUCCEEDED: 'default',
@@ -15,6 +16,7 @@ const statusVariant: Record<ChargeStatus, 'default' | 'secondary' | 'destructive
   CANCELED: 'secondary',
   EXPIRED: 'outline',
   REFUNDED: 'secondary',
+  PARTIALLY_REFUNDED: 'secondary',
   AUTHORIZED: 'default',
   PENDING: 'outline',
 }
@@ -25,6 +27,7 @@ const statusLabel: Record<ChargeStatus, string> = {
   CANCELED: 'Cancelado',
   EXPIRED: 'Expirado',
   REFUNDED: 'Reembolsado',
+  PARTIALLY_REFUNDED: 'Reembolso parcial',
   AUTHORIZED: 'Autorizado',
   PENDING: 'Pendiente',
 }
@@ -60,7 +63,7 @@ export default function PaymentDetail() {
     return (
       <div className="p-8">
         <div className="mb-6 flex items-center gap-4">
-          <Button variant="ghost" size="icon" onClick={() => navigate('/payments')}>
+          <Button variant="ghost" size="icon" onClick={() => navigate(-1)}>
             <ArrowLeft className="h-4 w-4" />
           </Button>
           <h1 className="text-2xl font-bold">Detalle del pago</h1>
@@ -98,10 +101,7 @@ export default function PaymentDetail() {
             <CardTitle className="text-base">Información general</CardTitle>
           </CardHeader>
           <CardContent>
-            <DetailRow
-              label="Importe"
-              value={`${(charge.amount / 100).toFixed(2)} ${charge.currency}`}
-            />
+            <DetailRow label="Importe" value={formatCurrency(charge.amount, charge.currency)} />
             <Separator />
             <DetailRow label="Order ID" value={charge.orderId} />
             <Separator />

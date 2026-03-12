@@ -4,6 +4,7 @@ export type ChargeStatus =
   | 'CANCELED'
   | 'EXPIRED'
   | 'REFUNDED'
+  | 'PARTIALLY_REFUNDED'
   | 'AUTHORIZED'
   | 'PENDING'
 

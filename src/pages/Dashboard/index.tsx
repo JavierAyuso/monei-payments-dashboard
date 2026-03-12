@@ -2,9 +2,16 @@ import { useChargesKPI, DATE_RANGE_OPTIONS, type DateRangeOption } from '@/hooks
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Skeleton } from '@/components/ui/skeleton'
-import { Button } from '@/components/ui/button'
 import { KPIChart } from '@/components/KPIChart'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
 import { AlertCircle, TrendingUp, TrendingDown, Ban, RotateCcw } from 'lucide-react'
+import { formatCurrency } from '@/lib/utils'
 
 function KPICard({
   title,
@@ -26,9 +33,7 @@ function KPICard({
         <Icon className="h-4 w-4 text-muted-foreground" />
       </CardHeader>
       <CardContent>
-        <p className="text-2xl font-bold">
-          {(amount / 100).toFixed(2)} {currency}
-        </p>
+        <p className="text-2xl font-bold">{formatCurrency(amount, currency)}</p>
         <p className="text-xs text-muted-foreground">{count} transacciones</p>
       </CardContent>
     </Card>
@@ -86,20 +91,19 @@ export default function Dashboard() {
       <div className="mb-6 flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold">Dashboard</h1>
-          <p className="text-muted-foreground">{DATE_RANGE_OPTIONS[selectedRange].label}</p>
         </div>
-        <div className="flex gap-2">
-          {(Object.keys(DATE_RANGE_OPTIONS) as DateRangeOption[]).map((key) => (
-            <Button
-              key={key}
-              variant={selectedRange === key ? 'default' : 'outline'}
-              size="sm"
-              onClick={() => setSelectedRange(key)}
-            >
-              {DATE_RANGE_OPTIONS[key].label}
-            </Button>
-          ))}
-        </div>
+        <Select value={selectedRange} onValueChange={(v) => setSelectedRange(v as DateRangeOption)}>
+          <SelectTrigger className="w-48">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            {(Object.keys(DATE_RANGE_OPTIONS) as DateRangeOption[]).map((key) => (
+              <SelectItem key={key} value={key}>
+                {DATE_RANGE_OPTIONS[key].label}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
       </div>
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">

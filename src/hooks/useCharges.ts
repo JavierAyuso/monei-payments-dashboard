@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useSearchParams } from 'react-router-dom'
 import { useQuery } from '@apollo/client/react'
 import { GET_CHARGES } from '@/graphql/charges'
 import type { Charge, ChargeStatus } from '@/types/charge'
@@ -21,8 +22,9 @@ interface ChargesVariables {
   }
 }
 
-export function useCharges() {
-  const [page, setPage] = useState(0)
+export function useCharges(page: number) {
+  const [, setSearchParams] = useSearchParams()
+
   const [statusFilter, setStatusFilter] = useState<ChargeStatus | null>(null)
   const [dateRange, setDateRange] = useState<{ from: Date | null; to: Date | null }>({
     from: null,
@@ -49,7 +51,7 @@ export function useCharges() {
   const { data, loading, error } = useQuery<ChargesData, ChargesVariables>(GET_CHARGES, {
     variables: {
       size: PAGE_SIZE,
-      from: page * PAGE_SIZE,
+      from: (page - 1) * PAGE_SIZE,
       filter: buildFilter(),
     },
   })
@@ -59,12 +61,12 @@ export function useCharges() {
 
   const handleStatusFilter = (status: ChargeStatus | null) => {
     setStatusFilter(status)
-    setPage(0)
+    setSearchParams({ page: '1' })
   }
 
   const handleDateRange = (range: { from: Date | null; to: Date | null }) => {
     setDateRange(range)
-    setPage(0)
+    setSearchParams({ page: '1' })
   }
 
   return {
@@ -72,12 +74,11 @@ export function useCharges() {
     total,
     loading,
     error,
-    page,
     totalPages,
-    hasNextPage: page < totalPages - 1,
-    hasPrevPage: page > 0,
-    goToNextPage: () => setPage((p) => p + 1),
-    goToPrevPage: () => setPage((p) => p - 1),
+    hasNextPage: page < totalPages,
+    hasPrevPage: page > 1,
+    goToNextPage: () => setSearchParams({ page: String(page + 1) }),
+    goToPrevPage: () => setSearchParams({ page: String(page - 1) }),
     statusFilter,
     setStatusFilter: handleStatusFilter,
     dateRange,

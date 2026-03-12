@@ -24,12 +24,33 @@ interface ChargesVariables {
 export function useCharges() {
   const [page, setPage] = useState(0)
   const [statusFilter, setStatusFilter] = useState<ChargeStatus | null>(null)
+  const [dateRange, setDateRange] = useState<{ from: Date | null; to: Date | null }>({
+    from: null,
+    to: null,
+  })
+
+  const buildFilter = () => {
+    const filter: ChargesVariables['filter'] = {}
+
+    if (statusFilter) {
+      filter.status = { eq: statusFilter }
+    }
+
+    if (dateRange.from && dateRange.to) {
+      filter.createdAt = {
+        gte: Math.floor(dateRange.from.getTime() / 1000),
+        lte: Math.floor(dateRange.to.getTime() / 1000),
+      }
+    }
+
+    return Object.keys(filter).length > 0 ? filter : undefined
+  }
 
   const { data, loading, error } = useQuery<ChargesData, ChargesVariables>(GET_CHARGES, {
     variables: {
       size: PAGE_SIZE,
       from: page * PAGE_SIZE,
-      filter: statusFilter ? { status: { eq: statusFilter } } : undefined,
+      filter: buildFilter(),
     },
   })
 
@@ -38,7 +59,12 @@ export function useCharges() {
 
   const handleStatusFilter = (status: ChargeStatus | null) => {
     setStatusFilter(status)
-    setPage(0) // volver a la primera página al filtrar
+    setPage(0)
+  }
+
+  const handleDateRange = (range: { from: Date | null; to: Date | null }) => {
+    setDateRange(range)
+    setPage(0)
   }
 
   return {
@@ -54,5 +80,7 @@ export function useCharges() {
     goToPrevPage: () => setPage((p) => p - 1),
     statusFilter,
     setStatusFilter: handleStatusFilter,
+    dateRange,
+    setDateRange: handleDateRange,
   }
 }

@@ -16,6 +16,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
+import { DateRangePicker } from '@/components/DateRangePicker'
 import type { ChargeStatus } from '@/types/charge'
 
 const statusVariant: Record<ChargeStatus, 'default' | 'secondary' | 'destructive' | 'outline'> = {
@@ -41,17 +42,19 @@ const statusLabel: Record<ChargeStatus, string> = {
 export default function Payments() {
   const {
     charges,
-    total,
-    loading,
+    dateRange,
     error,
-    page,
-    totalPages,
-    hasNextPage,
-    hasPrevPage,
     goToNextPage,
     goToPrevPage,
-    statusFilter,
+    hasNextPage,
+    hasPrevPage,
+    loading,
+    page,
+    setDateRange,
     setStatusFilter,
+    statusFilter,
+    total,
+    totalPages,
   } = useCharges()
 
   if (loading) return <div className="p-8">Cargando pagos...</div>
@@ -82,6 +85,7 @@ export default function Payments() {
             <SelectItem value="REFUNDED">Reembolsado</SelectItem>
           </SelectContent>
         </Select>
+        <DateRangePicker from={dateRange.from} to={dateRange.to} onChange={setDateRange} />
       </div>
       <Table>
         <TableHeader>

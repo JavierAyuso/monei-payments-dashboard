@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Button } from '@/components/ui/button'
+import { KPIChart } from '@/components/KPIChart'
 import { AlertCircle, TrendingUp, TrendingDown, Ban, RotateCcw } from 'lucide-react'
 
 function KPICard({
@@ -131,6 +132,14 @@ export default function Dashboard() {
           icon={RotateCcw}
         />
       </div>
+      <Card className="mt-6">
+        <CardHeader>
+          <CardTitle className="text-base">Evolución de pagos</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <KPIChart data={kpi.data} currency={kpi.currency} range={selectedRange} />
+        </CardContent>
+      </Card>
     </div>
   )
 }

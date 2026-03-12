@@ -1,35 +1,25 @@
 import { gql } from '@apollo/client'
 
 export const GET_CHARGES_KPI = gql`
-  query GetChargesKPI($start: Int, $end: Int, $timezone: String) {
-    chargesDateRangeKPI(start: $start, end: $end, timezone: $timezone) {
+  query GetChargesKPI($start: Int, $end: Int, $timezone: String, $interval: Interval) {
+    chargesDateRangeKPI(start: $start, end: $end, timezone: $timezone, interval: $interval) {
       currency
       total {
         succeededAmount
         succeededCount
-        capturedAmount
-        capturedCount
+        failedAmount
+        failedCount
         canceledAmount
         canceledCount
         refundedAmount
         refundedCount
-        failedAmount
-        failedCount
       }
       data {
         timestamp
         succeededAmount
-        succeededCount
-        capturedAmount
-        capturedCount
-        canceledAmount
-        canceledCount
-        refundedAmount
-        refundedCount
         failedAmount
-        failedCount
-        cuSucceededAmount
-        cuSucceededCount
+        canceledAmount
+        refundedAmount
       }
     }
   }

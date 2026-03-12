@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { useQuery } from '@apollo/client/react'
 import { GET_CHARGES_KPI } from '@/graphql/chargesKPI'
-import type { ChargesKPI } from '@/types/kpis'
+import type { ChargesKPI, KPIVariables, KPIData } from '@/types/kpis'
 import { subDays, subMonths, subYears, startOfDay, endOfDay } from 'date-fns'
 
 export type DateRangeOption = 'today' | 'week' | 'month' | 'quarter' | 'year' | 'all'
@@ -17,14 +17,21 @@ const DATE_RANGE_OPTIONS: Record<DateRangeOption, { label: string; from: () => D
 
 export { DATE_RANGE_OPTIONS }
 
-interface KPIData {
-  chargesDateRangeKPI: ChargesKPI
-}
-
-interface KPIVariables {
-  start?: number
-  end?: number
-  timezone?: string
+function getInterval(range: DateRangeOption): string {
+  switch (range) {
+    case 'today':
+      return 'hour'
+    case 'week':
+      return 'day'
+    case 'month':
+      return 'day'
+    case 'quarter':
+      return 'week'
+    case 'year':
+      return 'month'
+    case 'all':
+      return 'month'
+  }
 }
 
 export function useChargesKPI() {
@@ -38,6 +45,7 @@ export function useChargesKPI() {
       start: Math.floor(startOfDay(from).getTime() / 1000),
       end: Math.floor(endOfDay(to).getTime() / 1000),
       timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+      interval: getInterval(selectedRange), // 👈 solo añade esto
     },
   })
 

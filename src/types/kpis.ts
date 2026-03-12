@@ -26,9 +26,18 @@ export interface KPITotal {
   failedAmount: number
   failedCount: number
 }
-
 export interface ChargesKPI {
   currency: string
   total: KPITotal
   data: KPIDataPoint[]
+}
+
+export interface KPIVariables {
+  start: number
+  end: number
+  timezone: string
+  interval: string
+}
+export interface KPIData {
+  chargesDateRangeKPI: ChargesKPI
 }

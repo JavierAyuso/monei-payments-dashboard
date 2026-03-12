@@ -9,7 +9,7 @@ export default function App() {
     <BrowserRouter>
       <div className="flex h-screen">
         <Sidebar />
-        <main className="flex-1 overflow-y-auto">
+        <main className="flex-1 overflow-y-auto md:pt-0 pt-14">
           <Routes>
             <Route path="/" element={<Dashboard />} />
             <Route path="/payments" element={<Payments />} />

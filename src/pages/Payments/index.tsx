@@ -9,6 +9,13 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
 import type { ChargeStatus } from '@/types/charge'
 
 const statusVariant: Record<ChargeStatus, 'default' | 'secondary' | 'destructive' | 'outline'> = {
@@ -43,6 +50,8 @@ export default function Payments() {
     hasPrevPage,
     goToNextPage,
     goToPrevPage,
+    statusFilter,
+    setStatusFilter,
   } = useCharges()
 
   if (loading) return <div className="p-8">Cargando pagos...</div>
@@ -54,7 +63,26 @@ export default function Payments() {
         <h1 className="text-2xl font-bold">Pagos</h1>
         <p className="text-muted-foreground">{total} pagos en total</p>
       </div>
-
+      <div className="mb-4 flex items-center gap-4">
+        <Select
+          value={statusFilter ?? 'ALL'}
+          onValueChange={(value) =>
+            setStatusFilter(value === 'ALL' ? null : (value as ChargeStatus))
+          }
+        >
+          <SelectTrigger className="w-48">
+            <SelectValue placeholder="Filtrar por estado" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="ALL">Todos los estados</SelectItem>
+            <SelectItem value="SUCCEEDED">Completado</SelectItem>
+            <SelectItem value="FAILED">Fallido</SelectItem>
+            <SelectItem value="CANCELED">Cancelado</SelectItem>
+            <SelectItem value="EXPIRED">Expirado</SelectItem>
+            <SelectItem value="REFUNDED">Reembolsado</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
       <Table>
         <TableHeader>
           <TableRow>

@@ -27,7 +27,9 @@ export function DateRangePicker({ from, to, onChange }: DateRangePickerProps) {
 
   const handleClear = (e: React.MouseEvent) => {
     e.stopPropagation()
+    e.preventDefault()
     onChange({ from: null, to: null })
+    setOpen(false)
   }
 
   const label =
@@ -36,28 +38,29 @@ export function DateRangePicker({ from, to, onChange }: DateRangePickerProps) {
       : 'Filtrar por fecha'
 
   return (
-    <Popover open={open} onOpenChange={setOpen}>
-      <PopoverTrigger asChild>
-        <Button variant="outline" className="w-64 justify-start gap-2">
-          <CalendarIcon className="h-4 w-4" />
-          <span className={from && to ? '' : 'text-muted-foreground'}>{label}</span>
-          {from && to && (
-            <X
-              className="ml-auto h-4 w-4 text-muted-foreground hover:text-foreground"
-              onClick={handleClear}
-            />
-          )}
+    <div className="flex items-center gap-2">
+      <Popover open={open} onOpenChange={setOpen}>
+        <PopoverTrigger asChild>
+          <Button variant="outline" className="w-64 justify-start gap-2">
+            <CalendarIcon className="h-4 w-4" />
+            <span className={from && to ? '' : 'text-muted-foreground'}>{label}</span>
+          </Button>
+        </PopoverTrigger>
+        <PopoverContent className="w-auto p-0" align="start">
+          <Calendar
+            mode="range"
+            selected={{ from: from ?? undefined, to: to ?? undefined }}
+            onSelect={handleSelect}
+            locale={es}
+            numberOfMonths={2}
+          />
+        </PopoverContent>
+      </Popover>
+      {from && to && (
+        <Button variant="ghost" size="icon" onClick={handleClear}>
+          <X className="h-4 w-4" />
         </Button>
-      </PopoverTrigger>
-      <PopoverContent className="w-auto p-0" align="start">
-        <Calendar
-          mode="range"
-          selected={{ from: from ?? undefined, to: to ?? undefined }}
-          onSelect={handleSelect}
-          locale={es}
-          numberOfMonths={2}
-        />
-      </PopoverContent>
-    </Popover>
+      )}
+    </div>
   )
 }

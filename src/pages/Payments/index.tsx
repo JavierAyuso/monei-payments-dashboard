@@ -1,5 +1,6 @@
 import { useCharges } from '@/hooks/useCharges'
 import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
 import {
   Table,
   TableBody,
@@ -31,7 +32,18 @@ const statusLabel: Record<ChargeStatus, string> = {
 }
 
 export default function Payments() {
-  const { charges, total, loading, error } = useCharges()
+  const {
+    charges,
+    total,
+    loading,
+    error,
+    page,
+    totalPages,
+    hasNextPage,
+    hasPrevPage,
+    goToNextPage,
+    goToPrevPage,
+  } = useCharges()
 
   if (loading) return <div className="p-8">Cargando pagos...</div>
   if (error) return <div className="p-8 text-red-500">Error: {error.message}</div>
@@ -77,6 +89,20 @@ export default function Payments() {
           ))}
         </TableBody>
       </Table>
+
+      <div className="mt-4 flex items-center justify-between">
+        <p className="text-sm text-muted-foreground">
+          Página {page + 1} de {totalPages}
+        </p>
+        <div className="flex gap-2">
+          <Button variant="outline" size="sm" onClick={goToPrevPage} disabled={!hasPrevPage}>
+            Anterior
+          </Button>
+          <Button variant="outline" size="sm" onClick={goToNextPage} disabled={!hasNextPage}>
+            Siguiente
+          </Button>
+        </div>
+      </div>
     </div>
   )
 }

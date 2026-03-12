@@ -1,5 +1,5 @@
 import { useQuery } from '@apollo/client/react'
-import { GET_CHARGE } from '@/graphql/charges'
+import { GET_CHARGE } from '@/graphql/charge'
 import type { Charge } from '@/types/charge'
 
 interface ChargeData {

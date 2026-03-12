@@ -1,47 +1,5 @@
 import { gql } from '@apollo/client'
 
-export const GET_CHARGES = gql`
-  query GetCharges($size: Int, $from: Int, $filter: SearchableChargeFilterInput) {
-    charges(size: $size, from: $from, filter: $filter) {
-      items {
-        id
-        accountId
-        checkoutId
-        createdAt
-        updatedAt
-        amount
-        amountEUR
-        currency
-        status
-        statusCode
-        statusMessage
-        orderId
-        description
-        authorizationCode
-        billingPlan
-        livemode
-        cancellationReason
-        lastRefundAmount
-        lastRefundReason
-        refundedAmount
-        paymentMethod {
-          method
-        }
-        customer {
-          email
-          name
-          phone
-        }
-        shop {
-          name
-          country
-        }
-      }
-      total
-    }
-  }
-`
-
 export const GET_CHARGE = gql`
   query GetCharge($id: ID!) {
     charge(id: $id) {
@@ -133,41 +91,6 @@ export const GET_CHARGE = gql`
         userId
         userEmail
         userName
-      }
-    }
-  }
-`
-
-export const GET_CHARGES_KPI = gql`
-  query GetChargesKPI($start: Int, $end: Int, $timezone: String) {
-    chargesDateRangeKPI(start: $start, end: $end, timezone: $timezone) {
-      currency
-      total {
-        succeededAmount
-        succeededCount
-        capturedAmount
-        capturedCount
-        canceledAmount
-        canceledCount
-        refundedAmount
-        refundedCount
-        failedAmount
-        failedCount
-      }
-      data {
-        timestamp
-        succeededAmount
-        succeededCount
-        capturedAmount
-        capturedCount
-        canceledAmount
-        canceledCount
-        refundedAmount
-        refundedCount
-        failedAmount
-        failedCount
-        cuSucceededAmount
-        cuSucceededCount
       }
     }
   }

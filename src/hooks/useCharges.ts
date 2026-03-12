@@ -3,8 +3,7 @@ import { useSearchParams } from 'react-router-dom'
 import { useQuery } from '@apollo/client/react'
 import { GET_CHARGES } from '@/graphql/charges'
 import type { Charge, ChargeStatus } from '@/types/charge'
-
-const PAGE_SIZE = 20
+import { PAGE_SIZE } from '@/lib/constants'
 
 interface ChargesData {
   charges: {

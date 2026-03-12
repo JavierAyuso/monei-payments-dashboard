@@ -11,6 +11,8 @@
     "format": "prettier --write \"src/**/*.{ts,tsx,css}\""
   },
   "dependencies": {
+    "@apollo/client": "^4.1.6",
+    "graphql": "^16.13.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0"
   },

@@ -122,3 +122,7 @@ La paginación se corrige automáticamente si la URL contiene un número de pág
 - **Caché de Apollo sin configuración avanzada**: se usa `InMemoryCache` con su configuración por defecto. En producción sería conveniente configurar políticas de caché por tipo para evitar refetches innecesarios.
 - **Algunos charges no devuelven detalle**: varios registros de la lista de pagos devuelven "Charge not found" al consultar su detalle individualmente. Es un problema de consistencia de datos en el entorno de staging, no un bug de la aplicación.
 - **Moneda única**: la API devuelve siempre EUR en los datos de staging. El código de divisa se propaga correctamente desde la API pero no se ha podido verificar el comportamiento con múltiples divisas.
+
+## Demo
+
+![Demo](./MONEI.gif)

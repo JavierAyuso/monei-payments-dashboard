@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useMemo } from 'react'
 import { useSearchParams } from 'react-router-dom'
 import { useQuery } from '@apollo/client/react'
 import { GET_CHARGES } from '@/graphql/charges'
@@ -23,35 +23,29 @@ interface ChargesVariables {
 
 export function useCharges(page: number) {
   const [, setSearchParams] = useSearchParams()
-
   const [statusFilter, setStatusFilter] = useState<ChargeStatus | null>(null)
   const [dateRange, setDateRange] = useState<{ from: Date | null; to: Date | null }>({
     from: null,
     to: null,
   })
 
-  const buildFilter = () => {
-    const filter: ChargesVariables['filter'] = {}
-
-    if (statusFilter) {
-      filter.status = { eq: statusFilter }
-    }
-
+  const filter = useMemo(() => {
+    const f: ChargesVariables['filter'] = {}
+    if (statusFilter) f.status = { eq: statusFilter }
     if (dateRange.from && dateRange.to) {
-      filter.createdAt = {
+      f.createdAt = {
         gte: Math.floor(dateRange.from.getTime() / 1000),
         lte: Math.floor(dateRange.to.getTime() / 1000),
       }
     }
-
-    return Object.keys(filter).length > 0 ? filter : undefined
-  }
+    return Object.keys(f).length > 0 ? f : undefined
+  }, [statusFilter, dateRange])
 
   const { data, loading, error } = useQuery<ChargesData, ChargesVariables>(GET_CHARGES, {
     variables: {
       size: PAGE_SIZE,
       from: (page - 1) * PAGE_SIZE,
-      filter: buildFilter(),
+      filter,
     },
   })
 

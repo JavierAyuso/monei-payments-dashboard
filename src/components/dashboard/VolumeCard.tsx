@@ -7,7 +7,6 @@ interface VolumeCardProps {
   count: number
   currency: string
   icon: React.ElementType
-  description: string
 }
 
 export function VolumeCard({ title, amount, count, currency, icon: Icon }: VolumeCardProps) {

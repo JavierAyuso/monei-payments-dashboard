@@ -122,7 +122,6 @@ export default function Dashboard() {
             count={kpi.total.succeededCount}
             currency={kpi.currency}
             icon={TrendingUp}
-            description="solo pagos completados"
           />
           <PaymentStatusCard data={statusData} />
           <RefundRatioCard
@@ -137,7 +136,6 @@ export default function Dashboard() {
             count={totalCount}
             currency={kpi.currency}
             icon={Activity}
-            description="completados + fallidos + cancelados + reembolsados"
           />
           <AverageTicketCard
             succeededAmount={kpi.total.succeededAmount}

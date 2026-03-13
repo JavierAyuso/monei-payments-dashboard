@@ -58,7 +58,21 @@ La aplicación estará disponible en `http://localhost:5173`.
 
 ## Variables de entorno
 
-El proyecto incluye un archivo `.env` con las credenciales de acceso al entorno de staging de MONEI. En un proyecto real estas credenciales no se incluirían en el repositorio.
+El proyecto incluye un archivo `.env.example` con la estructura necesaria. Para configurarlo:
+
+1. Copia el archivo de ejemplo:
+
+```bash
+   cp .env.example .env
+```
+
+2. Abre `.env` y añade tu API key de MONEI:
+
+```
+   VITE_API_KEY=tu_api_key_aqui
+```
+
+> En un proyecto real las credenciales nunca se incluirían en el repositorio. El archivo `.env` está incluido en `.gitignore`.
 
 ## Estructura del proyecto
 

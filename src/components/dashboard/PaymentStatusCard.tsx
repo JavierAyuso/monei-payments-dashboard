@@ -23,6 +23,7 @@ export function PaymentStatusCard({ data }: PaymentStatusCardProps) {
           .filter((d) => d.value > 0)
           .map((d) => ({ name: d.label, value: d.value, color: d.color }))
 
+  console.log(chartData)
   return (
     <Card>
       <CardHeader className="flex flex-row items-center justify-between pb-2">
@@ -32,10 +33,10 @@ export function PaymentStatusCard({ data }: PaymentStatusCardProps) {
         <PieChartIcon className="h-4 w-4 text-muted-foreground" />
       </CardHeader>
       <CardContent>
-        <ResponsiveContainer width="100%" height={160} minWidth={280}>
+        <ResponsiveContainer width="80%" height={160} minWidth={280}>
           <PieChart>
             <Pie
-              cx="35%"
+              cx="50%"
               cy="50%"
               data={chartData}
               dataKey="value"
@@ -58,10 +59,11 @@ export function PaymentStatusCard({ data }: PaymentStatusCardProps) {
             />
             <Legend
               align="right"
-              iconSize={8}
+              iconSize={5}
               iconType="circle"
               layout="vertical"
               verticalAlign="middle"
+              wrapperStyle={{ fontSize: '9px', textTransform: 'uppercase' }}
             />
           </PieChart>
         </ResponsiveContainer>

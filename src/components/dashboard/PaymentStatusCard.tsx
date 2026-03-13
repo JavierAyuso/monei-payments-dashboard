@@ -1,6 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer } from 'recharts'
 import { PieChart as PieChartIcon } from 'lucide-react'
+import { t } from '@/lib/i18n'
 
 export interface StatusDataPoint {
   label: string
@@ -17,7 +18,7 @@ export function PaymentStatusCard({ data }: PaymentStatusCardProps) {
 
   const chartData =
     totalCount === 0
-      ? [{ name: 'Sin pagos', value: 1, color: '#e2e8f0' }]
+      ? [{ name: t.common.noData, value: 1, color: '#e2e8f0' }]
       : data
           .filter((d) => d.value > 0)
           .map((d) => ({ name: d.label, value: d.value, color: d.color }))
@@ -25,7 +26,9 @@ export function PaymentStatusCard({ data }: PaymentStatusCardProps) {
   return (
     <Card>
       <CardHeader className="flex flex-row items-center justify-between pb-2">
-        <CardTitle className="text-sm font-medium text-muted-foreground">Estado de pagos</CardTitle>
+        <CardTitle className="text-sm font-medium text-muted-foreground">
+          {t.dashboard.paymentStatus}
+        </CardTitle>
         <PieChartIcon className="h-4 w-4 text-muted-foreground" />
       </CardHeader>
       <CardContent>
@@ -47,7 +50,7 @@ export function PaymentStatusCard({ data }: PaymentStatusCardProps) {
             </Pie>
             <Tooltip
               formatter={(value, name) => {
-                if (name === 'Sin pagos') return ['Sin pagos en este período', '']
+                if (name === t.common.noData) return [t.dashboard.noPeriodData, '']
                 const v = Number(value)
                 const pct = ((v / totalCount) * 100).toFixed(1)
                 return [`${v} (${pct}%)`, name as string]

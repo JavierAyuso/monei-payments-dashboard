@@ -1,5 +1,6 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { formatCurrency } from '@/lib/utils'
+import { t } from '@/lib/i18n'
 
 interface VolumeCardProps {
   title: string
@@ -18,7 +19,7 @@ export function VolumeCard({ title, amount, count, currency, icon: Icon }: Volum
       </CardHeader>
       <CardContent>
         <p className="text-2xl font-bold">{formatCurrency(amount, currency)}</p>
-        <p className="text-xs text-muted-foreground">{count} transacciones</p>
+        <p className="text-xs text-muted-foreground">{t.dashboard.transactions(count)}</p>
       </CardContent>
     </Card>
   )

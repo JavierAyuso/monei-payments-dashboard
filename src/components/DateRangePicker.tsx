@@ -5,6 +5,7 @@ import { CalendarIcon, X } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Calendar } from '@/components/ui/calendar'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
+import { t } from '@/lib/i18n'
 
 interface DateRangePickerProps {
   from: Date | null
@@ -35,7 +36,7 @@ export function DateRangePicker({ from, to, onChange }: DateRangePickerProps) {
   const label =
     from && to
       ? `${format(from, 'dd/MM/yyyy', { locale: es })} - ${format(to, 'dd/MM/yyyy', { locale: es })}`
-      : 'Filtrar por fecha'
+      : t.dateRangePicker.filterByDate
 
   return (
     <div className="flex items-center gap-2">

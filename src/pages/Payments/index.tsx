@@ -26,6 +26,7 @@ import type { ChargeStatus } from '@/types/charge'
 import { formatCurrency } from '@/lib/utils'
 import { statusClass, statusLabel } from '@/lib/charge'
 import { PAGE_SIZE } from '@/lib/constants'
+import { t } from '@/lib/i18n'
 
 export default function Payments() {
   const [searchParams, setSearchParams] = useSearchParams()
@@ -61,8 +62,8 @@ export default function Payments() {
   return (
     <div className="p-8">
       <div className="mb-6">
-        <h1 className="text-2xl font-bold">Pagos</h1>
-        <p className="text-muted-foreground">{total} pagos en total</p>
+        <h1 className="text-2xl font-bold">{t.payments.title}</h1>
+        <p className="text-muted-foreground">{t.payments.total(total)}</p>
       </div>
 
       <div className="mb-4 flex items-center gap-4">
@@ -73,16 +74,16 @@ export default function Payments() {
           }
         >
           <SelectTrigger className="w-48">
-            <SelectValue placeholder="Filtrar por estado" />
+            <SelectValue placeholder={t.payments.filterByStatus} />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="ALL">Todos los estados</SelectItem>
-            <SelectItem value="SUCCEEDED">Completado</SelectItem>
-            <SelectItem value="FAILED">Fallido</SelectItem>
-            <SelectItem value="CANCELED">Cancelado</SelectItem>
-            <SelectItem value="EXPIRED">Expirado</SelectItem>
-            <SelectItem value="REFUNDED">Reembolsado</SelectItem>
-            <SelectItem value="PARTIALLY_REFUNDED">Reembolso parcial</SelectItem>
+            <SelectItem value="ALL">{t.payments.allStatuses}</SelectItem>
+            <SelectItem value="SUCCEEDED">{t.statusLabel.SUCCEEDED}</SelectItem>
+            <SelectItem value="FAILED">{t.statusLabel.FAILED}</SelectItem>
+            <SelectItem value="CANCELED">{t.statusLabel.CANCELED}</SelectItem>
+            <SelectItem value="EXPIRED">{t.statusLabel.EXPIRED}</SelectItem>
+            <SelectItem value="REFUNDED">{t.statusLabel.REFUNDED}</SelectItem>
+            <SelectItem value="PARTIALLY_REFUNDED">{t.statusLabel.PARTIALLY_REFUNDED}</SelectItem>
           </SelectContent>
         </Select>
         <DateRangePicker from={dateRange.from} to={dateRange.to} onChange={setDateRange} />
@@ -91,7 +92,7 @@ export default function Payments() {
       {error && (
         <Alert variant="destructive" className="mb-4">
           <AlertCircle className="h-4 w-4" />
-          <AlertTitle>Error</AlertTitle>
+          <AlertTitle>{t.common.error}</AlertTitle>
           <AlertDescription>{error.message}</AlertDescription>
         </Alert>
       )}
@@ -99,11 +100,11 @@ export default function Payments() {
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead>Fecha</TableHead>
-            <TableHead>Order ID</TableHead>
-            <TableHead>Importe</TableHead>
-            <TableHead>Método</TableHead>
-            <TableHead>Estado</TableHead>
+            <TableHead>{t.payments.date}</TableHead>
+            <TableHead>{t.payments.orderId}</TableHead>
+            <TableHead>{t.payments.amount}</TableHead>
+            <TableHead>{t.payments.method}</TableHead>
+            <TableHead>{t.payments.status}</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -130,7 +131,7 @@ export default function Payments() {
           ) : charges.length === 0 ? (
             <TableRow>
               <TableCell colSpan={5} className="py-8 text-center text-muted-foreground">
-                No se encontraron pagos
+                {t.payments.notFound}
               </TableCell>
             </TableRow>
           ) : (
@@ -162,15 +163,13 @@ export default function Payments() {
       </Table>
 
       <div className="mt-4 flex items-center justify-between">
-        <p className="text-sm text-muted-foreground">
-          Página {page} de {totalPages}
-        </p>
+        <p className="text-sm text-muted-foreground">{t.payments.page(page, totalPages)}</p>
         <div className="flex gap-2">
           <Button variant="outline" size="sm" onClick={goToPrevPage} disabled={!hasPrevPage}>
-            Anterior
+            {t.common.prev}
           </Button>
           <Button variant="outline" size="sm" onClick={goToNextPage} disabled={!hasNextPage}>
-            Siguiente
+            {t.common.next}
           </Button>
         </div>
       </div>

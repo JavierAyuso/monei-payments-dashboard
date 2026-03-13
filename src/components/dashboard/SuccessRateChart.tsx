@@ -5,6 +5,7 @@ import { es } from 'date-fns/locale'
 import type { KPIDataPoint } from '@/types/kpis'
 import type { DateRangeOption } from '@/hooks/useChargesKPI'
 import { BarChart2 } from 'lucide-react'
+import { t } from '@/lib/i18n'
 
 interface SuccessRateChartProps {
   data: KPIDataPoint[]
@@ -29,12 +30,15 @@ export function SuccessRateChart({ data, range }: SuccessRateChartProps) {
   if (chartData.length === 0) {
     return (
       <Card>
-        <CardHeader className="pb-2">
-          <CardTitle className="text-sm font-medium text-muted-foreground">Tasa de éxito</CardTitle>
+        <CardHeader className="flex flex-row items-center justify-between pb-2">
+          <CardTitle className="text-sm font-medium text-muted-foreground">
+            {t.dashboard.successRateShort}
+          </CardTitle>
+          <BarChart2 className="h-4 w-4 text-muted-foreground" />
         </CardHeader>
         <CardContent>
           <div className="flex h-48 items-center justify-center text-sm text-muted-foreground">
-            No hay datos para mostrar en este período
+            {t.dashboard.noChartData}
           </div>
         </CardContent>
       </Card>
@@ -45,7 +49,7 @@ export function SuccessRateChart({ data, range }: SuccessRateChartProps) {
     <Card>
       <CardHeader className="flex flex-row items-center justify-between pb-2">
         <CardTitle className="text-sm font-medium text-muted-foreground">
-          Tasa de éxito por período
+          {t.dashboard.successRate}
         </CardTitle>
         <BarChart2 className="h-4 w-4 text-muted-foreground" />
       </CardHeader>
@@ -60,7 +64,7 @@ export function SuccessRateChart({ data, range }: SuccessRateChartProps) {
               tickFormatter={(v) => `${v}%`}
               className="text-muted-foreground"
             />
-            <Tooltip formatter={(value) => [`${value}%`, 'Tasa de éxito']} />
+            <Tooltip formatter={(value) => [`${value}%`, t.dashboard.successRateShort]} />
             <Bar dataKey="rate" fill="#22c55e" radius={[4, 4, 0, 0]} />
           </BarChart>
         </ResponsiveContainer>

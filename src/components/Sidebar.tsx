@@ -4,11 +4,12 @@ import { LayoutDashboard, CreditCard, Menu, X, Sun, Moon } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import { useTheme } from '@/hooks/useTheme'
+import { t } from '@/lib/i18n'
 import moneiLogo from '@/assets/monei-logo-color.svg'
 
 const links = [
-  { to: '/', label: 'Dashboard', icon: LayoutDashboard },
-  { to: '/payments', label: 'Pagos', icon: CreditCard },
+  { to: '/', label: t.nav.dashboard, icon: LayoutDashboard },
+  { to: '/payments', label: t.nav.payments, icon: CreditCard },
 ]
 
 function NavLinks({ onClick }: { onClick?: () => void }) {
@@ -41,6 +42,9 @@ export function Sidebar() {
   const [open, setOpen] = useState(false)
   const { isDark, toggle } = useTheme()
 
+  const themeLabel = isDark ? t.nav.lightMode : t.nav.darkMode
+  const ThemeIcon = isDark ? Sun : Moon
+
   return (
     <>
       {/* Desktop sidebar */}
@@ -54,8 +58,8 @@ export function Sidebar() {
             onClick={toggle}
             className="w-full justify-start gap-3 text-muted-foreground"
           >
-            {isDark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
-            {isDark ? 'Modo claro' : 'Modo oscuro'}
+            <ThemeIcon className="h-4 w-4" />
+            {themeLabel}
           </Button>
         </div>
       </aside>
@@ -65,7 +69,7 @@ export function Sidebar() {
         <img src={moneiLogo} alt="MONEI" className="h-5" />
         <div className="flex items-center gap-2">
           <Button variant="ghost" size="icon" onClick={toggle}>
-            {isDark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+            <ThemeIcon className="h-4 w-4" />
           </Button>
           <Button variant="ghost" size="icon" onClick={() => setOpen(true)}>
             <Menu className="h-5 w-5" />

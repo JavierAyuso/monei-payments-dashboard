@@ -1,4 +1,5 @@
 import type { ChargeStatus } from '@/types/charge'
+import { t } from '@/lib/i18n'
 
 export const statusColor: Record<ChargeStatus, string> = {
   SUCCEEDED: '#22c55e',
@@ -22,13 +23,4 @@ export const statusClass: Record<ChargeStatus, string> = {
   PENDING: 'bg-orange-500/20 text-orange-600 dark:text-orange-400',
 }
 
-export const statusLabel: Record<ChargeStatus, string> = {
-  SUCCEEDED: 'Completado',
-  FAILED: 'Fallido',
-  CANCELED: 'Cancelado',
-  EXPIRED: 'Expirado',
-  REFUNDED: 'Reembolsado',
-  PARTIALLY_REFUNDED: 'Reembolso parcial',
-  AUTHORIZED: 'Autorizado',
-  PENDING: 'Pendiente',
-}
+export const statusLabel: Record<ChargeStatus, string> = t.statusLabel

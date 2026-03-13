@@ -6,9 +6,9 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
 import { Skeleton } from '@/components/ui/skeleton'
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { statusClass, statusLabel } from '@/lib/charge'
 import { formatCurrency } from '@/lib/utils'
+import { t } from '@/lib/i18n'
 
 function DetailRow({ label, value }: { label: string; value: React.ReactNode }) {
   if (!value) return null
@@ -76,11 +76,11 @@ export default function PaymentDetail() {
       <div className="flex h-full items-center justify-center p-8">
         <div className="flex flex-col items-center gap-2 text-center">
           <AlertCircle className="h-8 w-8 text-yellow-500" />
-          <h2 className="font-medium">No disponemos de detalle sobre esta operación</h2>
+          <h2 className="font-medium">{t.paymentDetail.notAvailable}</h2>
           <p className="text-sm text-muted-foreground">{error.message}</p>
           <Button variant="ghost" size="sm" onClick={() => navigate(-1)} className="mt-2">
             <ArrowLeft className="h-4 w-4" />
-            Volver
+            {t.common.back}
           </Button>
         </div>
       </div>
@@ -96,7 +96,7 @@ export default function PaymentDetail() {
           <ArrowLeft className="h-4 w-4" />
         </Button>
         <div>
-          <h1 className="text-2xl font-bold">Detalle del pago</h1>
+          <h1 className="text-2xl font-bold">{t.paymentDetail.title}</h1>
         </div>
         <Badge className={`ml-auto ${statusClass[charge.status]}`}>
           {statusLabel[charge.status]}
@@ -105,146 +105,180 @@ export default function PaymentDetail() {
 
       <div className="flex flex-col md:flex-row gap-4 items-start">
         <div className="flex flex-col gap-4 w-full">
-          {/* Información general */}
           <Card>
             <CardHeader>
-              <CardTitle className="text-base">Información general</CardTitle>
+              <CardTitle className="text-base">{t.paymentDetail.generalInfo}</CardTitle>
             </CardHeader>
             <CardContent>
-              <DetailRow label="Importe" value={formatCurrency(charge.amount, charge.currency)} />
+              <DetailRow
+                label={t.paymentDetail.amount}
+                value={formatCurrency(charge.amount, charge.currency)}
+              />
               <Separator />
-              <DetailRow label="Order ID" value={charge.orderId} />
+              <DetailRow label={t.paymentDetail.orderId} value={charge.orderId} />
               <Separator />
-              <DetailRow label="Descripción" value={charge.description} />
+              <DetailRow label={t.paymentDetail.description} value={charge.description} />
               <Separator />
               <DetailRow
-                label="Fecha de creación"
+                label={t.paymentDetail.createdAt}
                 value={new Date(charge.createdAt * 1000).toLocaleString('es-ES')}
               />
               <Separator />
               <DetailRow
-                label="Última actualización"
+                label={t.paymentDetail.updatedAt}
                 value={new Date(charge.updatedAt * 1000).toLocaleString('es-ES')}
               />
               <Separator />
-              <DetailRow label="Código de autorización" value={charge.authorizationCode} />
+              <DetailRow
+                label={t.paymentDetail.authorizationCode}
+                value={charge.authorizationCode}
+              />
               <Separator />
-              <DetailRow label="Código de estado" value={charge.statusCode} />
+              <DetailRow label={t.paymentDetail.statusCode} value={charge.statusCode} />
               <Separator />
-              <DetailRow label="Mensaje de estado" value={charge.statusMessage} />
+              <DetailRow label={t.paymentDetail.statusMessage} value={charge.statusMessage} />
               <Separator />
-              <DetailRow label="Entorno" value={charge.livemode ? 'Producción' : 'Test'} />
+              <DetailRow
+                label={t.paymentDetail.environment}
+                value={charge.livemode ? t.common.production : t.common.test}
+              />
             </CardContent>
           </Card>
 
-          {/* Cliente */}
           {charge.customer && (
             <Card>
               <CardHeader>
-                <CardTitle className="text-base">Cliente</CardTitle>
+                <CardTitle className="text-base">{t.paymentDetail.customer}</CardTitle>
               </CardHeader>
               <CardContent>
-                <DetailRow label="Nombre" value={charge.customer.name} />
+                <DetailRow label={t.paymentDetail.name} value={charge.customer.name} />
                 <Separator />
-                <DetailRow label="Email" value={charge.customer.email} />
+                <DetailRow label={t.paymentDetail.email} value={charge.customer.email} />
                 <Separator />
-                <DetailRow label="Teléfono" value={charge.customer.phone} />
+                <DetailRow label={t.paymentDetail.phone} value={charge.customer.phone} />
               </CardContent>
             </Card>
           )}
 
-          {/* Tienda */}
           {charge.shop && (
             <Card>
               <CardHeader>
-                <CardTitle className="text-base">Tienda</CardTitle>
+                <CardTitle className="text-base">{t.paymentDetail.shop}</CardTitle>
               </CardHeader>
               <CardContent>
-                <DetailRow label="Nombre" value={charge.shop.name} />
+                <DetailRow label={t.paymentDetail.name} value={charge.shop.name} />
                 <Separator />
-                <DetailRow label="País" value={charge.shop.country} />
+                <DetailRow label={t.paymentDetail.country} value={charge.shop.country} />
               </CardContent>
             </Card>
           )}
         </div>
 
         <div className="flex flex-col gap-4 w-full">
-          {/* Método de pago */}
           <Card>
             <CardHeader>
-              <CardTitle className="text-base">Método de pago</CardTitle>
+              <CardTitle className="text-base">{t.paymentDetail.paymentMethod}</CardTitle>
             </CardHeader>
             <CardContent>
               <DetailRow
-                label="Método"
+                label={t.payments.method}
                 value={<span className="capitalize">{charge.paymentMethod?.method ?? '—'}</span>}
               />
               {charge.paymentMethod?.card && (
                 <>
                   <Separator />
-                  <DetailRow label="Marca" value={charge.paymentMethod.card.brand} />
-                  <Separator />
-                  <DetailRow label="Últimos 4 dígitos" value={charge.paymentMethod.card.last4} />
-                  <Separator />
-                  <DetailRow label="Titular" value={charge.paymentMethod.card.cardholderName} />
-                  <Separator />
-                  <DetailRow label="Expiración" value={charge.paymentMethod.card.expiration} />
-                  <Separator />
-                  <DetailRow label="Banco" value={charge.paymentMethod.card.bank} />
-                  <Separator />
-                  <DetailRow label="País" value={charge.paymentMethod.card.country} />
+                  <DetailRow
+                    label={t.paymentDetail.brand}
+                    value={charge.paymentMethod.card.brand}
+                  />
                   <Separator />
                   <DetailRow
-                    label="3D Secure"
-                    value={charge.paymentMethod.card.threeDSecure ? 'Sí' : 'No'}
+                    label={t.paymentDetail.last4}
+                    value={charge.paymentMethod.card.last4}
+                  />
+                  <Separator />
+                  <DetailRow
+                    label={t.paymentDetail.cardholder}
+                    value={charge.paymentMethod.card.cardholderName}
+                  />
+                  <Separator />
+                  <DetailRow
+                    label={t.paymentDetail.expiration}
+                    value={charge.paymentMethod.card.expiration}
+                  />
+                  <Separator />
+                  <DetailRow label={t.paymentDetail.bank} value={charge.paymentMethod.card.bank} />
+                  <Separator />
+                  <DetailRow
+                    label={t.paymentDetail.country}
+                    value={charge.paymentMethod.card.country}
+                  />
+                  <Separator />
+                  <DetailRow
+                    label={t.paymentDetail.threeDSecure}
+                    value={charge.paymentMethod.card.threeDSecure ? t.common.yes : t.common.no}
                   />
                 </>
               )}
               {charge.paymentMethod?.bizum && (
                 <>
                   <Separator />
-                  <DetailRow label="Teléfono" value={charge.paymentMethod.bizum.phoneNumber} />
+                  <DetailRow
+                    label={t.paymentDetail.phone}
+                    value={charge.paymentMethod.bizum.phoneNumber}
+                  />
                 </>
               )}
               {charge.paymentMethod?.paypal && (
                 <>
                   <Separator />
-                  <DetailRow label="Email" value={charge.paymentMethod.paypal.email} />
+                  <DetailRow
+                    label={t.paymentDetail.email}
+                    value={charge.paymentMethod.paypal.email}
+                  />
                   <Separator />
-                  <DetailRow label="Nombre" value={charge.paymentMethod.paypal.name} />
+                  <DetailRow
+                    label={t.paymentDetail.name}
+                    value={charge.paymentMethod.paypal.name}
+                  />
                 </>
               )}
             </CardContent>
           </Card>
 
-          {/* Traza técnica */}
           {charge.traceDetails && (
             <Card>
               <CardHeader>
-                <CardTitle className="text-base">Traza técnica</CardTitle>
+                <CardTitle className="text-base">{t.paymentDetail.traceDetails}</CardTitle>
               </CardHeader>
               <CardContent>
-                <DetailRow label="IP" value={charge.traceDetails.ip} />
-                <Separator />
-                <DetailRow label="País" value={charge.traceDetails.countryCode} />
-                <Separator />
-                <DetailRow label="Dispositivo" value={charge.traceDetails.deviceType} />
-                <Separator />
-                <DetailRow label="Modelo" value={charge.traceDetails.deviceModel} />
+                <DetailRow label={t.paymentDetail.ip} value={charge.traceDetails.ip} />
                 <Separator />
                 <DetailRow
-                  label="Navegador"
+                  label={t.paymentDetail.country}
+                  value={charge.traceDetails.countryCode}
+                />
+                <Separator />
+                <DetailRow label={t.paymentDetail.device} value={charge.traceDetails.deviceType} />
+                <Separator />
+                <DetailRow label={t.paymentDetail.model} value={charge.traceDetails.deviceModel} />
+                <Separator />
+                <DetailRow
+                  label={t.paymentDetail.browser}
                   value={`${charge.traceDetails.browser} ${charge.traceDetails.browserVersion}`}
                 />
                 <Separator />
                 <DetailRow
-                  label="Sistema operativo"
+                  label={t.paymentDetail.os}
                   value={`${charge.traceDetails.os} ${charge.traceDetails.osVersion}`}
                 />
                 <Separator />
-                <DetailRow label="Usuario" value={charge.traceDetails.userName} />
+                <DetailRow label={t.paymentDetail.user} value={charge.traceDetails.userName} />
                 <Separator />
-                <DetailRow label="Email usuario" value={charge.traceDetails.userEmail} />
+                <DetailRow
+                  label={t.paymentDetail.userEmail}
+                  value={charge.traceDetails.userEmail}
+                />
               </CardContent>
             </Card>
           )}

@@ -16,21 +16,37 @@ import {
 } from '@/components/ui/select'
 import { statusColor, statusLabel } from '@/lib/charge'
 import { AlertCircle, TrendingUp, Activity } from 'lucide-react'
+import { t } from '@/lib/i18n'
 
 function KPISkeleton() {
   return (
-    <div className="grid gap-4 md:grid-cols-2">
-      {Array.from({ length: 6 }).map((_, i) => (
-        <Card key={i}>
-          <CardHeader className="pb-2">
-            <Skeleton className="h-4 w-24" />
-          </CardHeader>
-          <CardContent>
-            <Skeleton className="mb-2 h-8 w-32" />
-            <Skeleton className="h-3 w-40" />
-          </CardContent>
-        </Card>
-      ))}
+    <div className="flex flex-col md:flex-row gap-4 items-start">
+      <div className="flex flex-col gap-4 w-full">
+        {Array.from({ length: 3 }).map((_, i) => (
+          <Card key={i}>
+            <CardHeader className="pb-2">
+              <Skeleton className="h-4 w-24" />
+            </CardHeader>
+            <CardContent>
+              <Skeleton className="mb-2 h-8 w-32" />
+              <Skeleton className="h-3 w-40" />
+            </CardContent>
+          </Card>
+        ))}
+      </div>
+      <div className="flex flex-col gap-4 w-full">
+        {Array.from({ length: 3 }).map((_, i) => (
+          <Card key={i}>
+            <CardHeader className="pb-2">
+              <Skeleton className="h-4 w-24" />
+            </CardHeader>
+            <CardContent>
+              <Skeleton className="mb-2 h-8 w-32" />
+              <Skeleton className="h-3 w-40" />
+            </CardContent>
+          </Card>
+        ))}
+      </div>
     </div>
   )
 }
@@ -56,7 +72,7 @@ export default function Dashboard() {
     return (
       <div className="p-8">
         <div className="mb-6">
-          <h1 className="text-2xl font-bold">Dashboard</h1>
+          <h1 className="text-2xl font-bold">{t.dashboard.title}</h1>
         </div>
         <KPISkeleton />
       </div>
@@ -68,7 +84,7 @@ export default function Dashboard() {
       <div className="p-8">
         <Alert variant="destructive">
           <AlertCircle className="h-4 w-4" />
-          <AlertTitle>Error</AlertTitle>
+          <AlertTitle>{t.common.error}</AlertTitle>
           <AlertDescription>{error.message}</AlertDescription>
         </Alert>
       </div>
@@ -99,7 +115,7 @@ export default function Dashboard() {
   return (
     <div className="p-8">
       <div className="mb-6 flex items-center justify-between">
-        <h1 className="text-2xl font-bold">Dashboard</h1>
+        <h1 className="text-2xl font-bold">{t.dashboard.title}</h1>
         <Select value={selectedRange} onValueChange={(v) => setSelectedRange(v as DateRangeOption)}>
           <SelectTrigger className="w-48">
             <SelectValue />
@@ -117,7 +133,7 @@ export default function Dashboard() {
       <div className="flex flex-col md:flex-row gap-4 items-start">
         <div className="flex flex-col gap-4 w-full">
           <VolumeCard
-            title="Volumen completado"
+            title={t.dashboard.completedVolume}
             amount={kpi.total.succeededAmount}
             count={kpi.total.succeededCount}
             currency={kpi.currency}
@@ -131,7 +147,7 @@ export default function Dashboard() {
         </div>
         <div className="flex flex-col gap-4 w-full">
           <VolumeCard
-            title="Volumen total"
+            title={t.dashboard.totalVolume}
             amount={totalVolume}
             count={totalCount}
             currency={kpi.currency}

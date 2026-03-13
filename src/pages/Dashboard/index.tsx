@@ -1,8 +1,12 @@
 import { useChargesKPI, DATE_RANGE_OPTIONS, type DateRangeOption } from '@/hooks/useChargesKPI'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent, CardHeader } from '@/components/ui/card'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Skeleton } from '@/components/ui/skeleton'
 import { VolumeCard } from '@/components/dashboard/VolumeCard'
+import { AverageTicketCard } from '@/components/dashboard/AverageTicketCard'
+import { PaymentStatusCard } from '@/components/dashboard/PaymentStatusCard'
+import { RefundRatioCard } from '@/components/dashboard/RefundRatioCard'
+import { SuccessRateChart } from '@/components/dashboard/SuccessRateChart'
 import {
   Select,
   SelectContent,
@@ -107,6 +111,17 @@ export default function Dashboard() {
           icon={Activity}
           description="completados + fallidos + cancelados + reembolsados"
         />
+        <PaymentStatusCard total={kpi.total} />
+        <AverageTicketCard
+          succeededAmount={kpi.total.succeededAmount}
+          succeededCount={kpi.total.succeededCount}
+          currency={kpi.currency}
+        />
+        <RefundRatioCard
+          refundedAmount={kpi.total.refundedAmount}
+          succeededAmount={kpi.total.succeededAmount}
+        />
+        <SuccessRateChart data={kpi.data} range={selectedRange} />
       </div>
     </div>
   )

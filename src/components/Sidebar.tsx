@@ -65,7 +65,7 @@ export function Sidebar() {
       </aside>
 
       {/* Mobile header */}
-      <header className="md:hidden fixed top-0 left-0 right-0 z-40 flex h-14 items-center justify-between bg-card px-4">
+      <header className="md:hidden fixed top-0 left-0 right-0 z-40 flex h-14 items-center justify-between bg-background px-4">
         <img src={moneiLogo} alt="MONEI" className="h-5" />
         <div className="flex items-center gap-2">
           <Button variant="ghost" size="icon" onClick={toggle}>
@@ -85,7 +85,7 @@ export function Sidebar() {
       {/* Mobile drawer */}
       <div
         className={cn(
-          'md:hidden fixed top-0 left-0 z-50 h-full w-56 bg-card px-3 py-6 shadow-lg transition-transform duration-200',
+          'md:hidden fixed top-0 left-0 z-50 h-full w-56 bg-background px-3 py-6 shadow-lg transition-transform duration-200',
           open ? 'translate-x-0' : '-translate-x-full'
         )}
       >

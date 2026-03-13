@@ -3,7 +3,7 @@ import { useNavigate, useSearchParams } from 'react-router-dom'
 import { useCharges } from '@/hooks/useCharges'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
-import { AlertCircle } from 'lucide-react'
+import { AlertCircle, CreditCard } from 'lucide-react'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Skeleton } from '@/components/ui/skeleton'
 import {
@@ -130,8 +130,40 @@ export default function Payments() {
             ))
           ) : charges.length === 0 ? (
             <TableRow>
-              <TableCell colSpan={5} className="py-8 text-center text-muted-foreground">
-                {t.payments.notFound}
+              <TableCell colSpan={5} className="py-16 text-center">
+                <div className="flex flex-col items-center gap-3">
+                  <div className="rounded-full bg-muted p-4">
+                    <CreditCard className="h-6 w-6 text-muted-foreground" />
+                  </div>
+                  <div className="flex flex-col gap-1">
+                    <p className="text-sm font-medium">
+                      {statusFilter || (dateRange.from && dateRange.to)
+                        ? t.payments.noResultsFiltered
+                        : t.payments.noResults}
+                    </p>
+                    <p className="text-xs text-muted-foreground">
+                      {statusFilter && !dateRange.from
+                        ? t.payments.noResultsStatus(statusLabel[statusFilter])
+                        : dateRange.from && dateRange.to && !statusFilter
+                          ? t.payments.noResultsDate
+                          : statusFilter && dateRange.from
+                            ? t.payments.noResultsBoth
+                            : t.payments.noResultsHint}
+                    </p>
+                  </div>
+                  {(statusFilter || (dateRange.from && dateRange.to)) && (
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => {
+                        setStatusFilter(null)
+                        setDateRange({ from: null, to: null })
+                      }}
+                    >
+                      {t.payments.clearFilters}
+                    </Button>
+                  )}
+                </div>
               </TableCell>
             </TableRow>
           ) : (
@@ -162,17 +194,19 @@ export default function Payments() {
         </TableBody>
       </Table>
 
-      <div className="mt-4 flex items-center justify-between">
-        <p className="text-sm text-muted-foreground">{t.payments.page(page, totalPages)}</p>
-        <div className="flex gap-2">
-          <Button variant="outline" size="sm" onClick={goToPrevPage} disabled={!hasPrevPage}>
-            {t.common.prev}
-          </Button>
-          <Button variant="outline" size="sm" onClick={goToNextPage} disabled={!hasNextPage}>
-            {t.common.next}
-          </Button>
+      {!loading && charges.length > 0 && (
+        <div className="mt-4 flex items-center justify-between">
+          <p className="text-sm text-muted-foreground">{t.payments.page(page, totalPages)}</p>
+          <div className="flex gap-2">
+            <Button variant="outline" size="sm" onClick={goToPrevPage} disabled={!hasPrevPage}>
+              {t.common.prev}
+            </Button>
+            <Button variant="outline" size="sm" onClick={goToNextPage} disabled={!hasNextPage}>
+              {t.common.next}
+            </Button>
+          </div>
         </div>
-      </div>
+      )}
     </div>
   )
 }

@@ -30,6 +30,9 @@ export const t = {
     successRate: 'Tasa de éxito por período',
     successRateShort: 'Tasa de éxito',
     noChartData: 'No hay datos para mostrar en este período',
+    noDataTitle: 'Sin actividad en este período',
+    noDataHint: 'Prueba a seleccionar un rango de fechas más amplio',
+    seeAllTime: 'Ver todo el historial',
   },
   payments: {
     title: 'Pagos',
@@ -43,6 +46,13 @@ export const t = {
     method: 'Método',
     status: 'Estado',
     page: (current: number, total: number) => `Página ${current} de ${total}`,
+    noResults: 'No hay pagos todavía',
+    noResultsHint: 'Los pagos aparecerán aquí cuando se procesen',
+    noResultsFiltered: 'No se encontraron pagos',
+    noResultsStatus: (status: string) => `No hay pagos con estado "${status}"`,
+    noResultsDate: 'No hay pagos en este rango de fechas',
+    noResultsBoth: 'No hay pagos con estos filtros activos',
+    clearFilters: 'Limpiar filtros',
   },
   paymentDetail: {
     title: 'Detalle del pago',

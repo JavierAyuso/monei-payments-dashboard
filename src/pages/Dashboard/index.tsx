@@ -15,8 +15,9 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { statusColor, statusLabel } from '@/lib/charge'
-import { AlertCircle, TrendingUp, Activity } from 'lucide-react'
+import { AlertCircle, TrendingUp, Activity, BarChart2 } from 'lucide-react'
 import { t } from '@/lib/i18n'
+import { Button } from '@/components/ui/button'
 
 function KPISkeleton() {
   return (
@@ -92,6 +93,51 @@ export default function Dashboard() {
   }
 
   if (!kpi) return null
+
+  const isEmpty =
+    kpi.total.succeededCount === 0 &&
+    kpi.total.failedCount === 0 &&
+    kpi.total.canceledCount === 0 &&
+    kpi.total.refundedCount === 0
+
+  if (isEmpty) {
+    return (
+      <div className="p-8">
+        <div className="mb-6 flex items-center justify-between">
+          <h1 className="text-2xl font-bold">{t.dashboard.title}</h1>
+          <Select
+            value={selectedRange}
+            onValueChange={(v) => setSelectedRange(v as DateRangeOption)}
+          >
+            <SelectTrigger className="w-48">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {(Object.keys(DATE_RANGE_OPTIONS) as DateRangeOption[]).map((key) => (
+                <SelectItem key={key} value={key}>
+                  {DATE_RANGE_OPTIONS[key].label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+        <div className="flex h-64 flex-col items-center justify-center gap-3 rounded-xl border border-dashed">
+          <div className="rounded-full bg-muted p-4">
+            <BarChart2 className="h-6 w-6 text-muted-foreground" />
+          </div>
+          <div className="flex flex-col items-center gap-1">
+            <p className="text-sm font-medium">{t.dashboard.noDataTitle}</p>
+            <p className="text-xs text-muted-foreground">{t.dashboard.noDataHint}</p>
+          </div>
+          {selectedRange !== 'all' && (
+            <Button variant="outline" size="sm" onClick={() => setSelectedRange('all')}>
+              {t.dashboard.seeAllTime}
+            </Button>
+          )}
+        </div>
+      </div>
+    )
+  }
 
   const statusData = [
     {

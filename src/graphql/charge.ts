@@ -4,13 +4,9 @@ export const GET_CHARGE = gql`
   query GetCharge($id: ID!) {
     charge(id: $id) {
       id
-      accountId
-      checkoutId
-      providerReferenceId
       createdAt
       updatedAt
       amount
-      amountEUR
       currency
       status
       statusCode
@@ -18,19 +14,12 @@ export const GET_CHARGE = gql`
       orderId
       description
       authorizationCode
-      billingPlan
       livemode
-      cancellationReason
-      lastRefundAmount
-      lastRefundReason
-      refundedAmount
-      pageOpenedAt
       paymentMethod {
         method
         card {
           brand
           country
-          type
           last4
           cardholderName
           expiration
@@ -39,20 +28,10 @@ export const GET_CHARGE = gql`
         }
         bizum {
           phoneNumber
-          integrationType
         }
         paypal {
-          orderId
-          payerId
           email
           name
-        }
-        sepa {
-          accountholderName
-          accountholderEmail
-          last4
-          bankName
-          bic
         }
       }
       customer {
@@ -60,27 +39,12 @@ export const GET_CHARGE = gql`
         name
         phone
       }
-      billingDetails {
-        email
-        name
-        company
-        phone
-        taxId
-      }
-      shippingDetails {
-        email
-        name
-        company
-        phone
-        taxId
-      }
       shop {
         name
         country
       }
       traceDetails {
         ip
-        userAgent
         countryCode
         deviceType
         deviceModel
@@ -88,9 +52,8 @@ export const GET_CHARGE = gql`
         browserVersion
         os
         osVersion
-        userId
-        userEmail
         userName
+        userEmail
       }
     }
   }

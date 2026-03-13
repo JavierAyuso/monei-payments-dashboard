@@ -11,7 +11,6 @@ export type ChargeStatus =
 export interface PaymentMethodCard {
   brand: string | null
   country: string | null
-  type: string | null
   last4: string | null
   cardholderName: string | null
   expiration: string | null
@@ -21,22 +20,11 @@ export interface PaymentMethodCard {
 
 export interface PaymentMethodBizum {
   phoneNumber: string | null
-  integrationType: string | null
 }
 
 export interface PaymentMethodPaypal {
-  orderId: string | null
-  payerId: string | null
   email: string | null
   name: string | null
-}
-
-export interface PaymentMethodSepa {
-  accountholderName: string | null
-  accountholderEmail: string | null
-  last4: string | null
-  bankName: string | null
-  bic: string | null
 }
 
 export interface PaymentMethod {
@@ -44,7 +32,6 @@ export interface PaymentMethod {
   card: PaymentMethodCard | null
   bizum: PaymentMethodBizum | null
   paypal: PaymentMethodPaypal | null
-  sepa: PaymentMethodSepa | null
 }
 
 export interface Customer {
@@ -53,25 +40,8 @@ export interface Customer {
   phone: string | null
 }
 
-export interface ShippingDetails {
-  email: string | null
-  name: string | null
-  company: string | null
-  phone: string | null
-  taxId: string | null
-}
-
-export interface BillingDetails {
-  email: string | null
-  name: string | null
-  company: string | null
-  phone: string | null
-  taxId: string | null
-}
-
 export interface TraceDetails {
   ip: string | null
-  userAgent: string | null
   countryCode: string | null
   deviceType: string | null
   deviceModel: string | null
@@ -79,9 +49,8 @@ export interface TraceDetails {
   browserVersion: string | null
   os: string | null
   osVersion: string | null
-  userId: string | null
-  userEmail: string | null
   userName: string | null
+  userEmail: string | null
 }
 
 export interface Shop {
@@ -91,12 +60,9 @@ export interface Shop {
 
 export interface Charge {
   id: string
-  accountId: string
-  checkoutId: string
   createdAt: number
   updatedAt: number
   amount: number
-  amountEUR: number | null
   currency: string
   status: ChargeStatus
   statusCode: string | null
@@ -104,16 +70,9 @@ export interface Charge {
   orderId: string | null
   description: string | null
   authorizationCode: string | null
-  billingPlan: string | null
   livemode: boolean
-  cancellationReason: string | null
-  lastRefundAmount: number | null
-  lastRefundReason: string | null
-  refundedAmount: number | null
   paymentMethod: PaymentMethod | null
   customer: Customer | null
-  billingDetails: BillingDetails | null
-  shippingDetails: ShippingDetails | null
   traceDetails: TraceDetails | null
   shop: Shop | null
 }

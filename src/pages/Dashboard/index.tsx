@@ -14,12 +14,13 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
+import { statusColor, statusLabel } from '@/lib/charge'
 import { AlertCircle, TrendingUp, Activity } from 'lucide-react'
 
 function KPISkeleton() {
   return (
     <div className="grid gap-4 md:grid-cols-2">
-      {Array.from({ length: 2 }).map((_, i) => (
+      {Array.from({ length: 6 }).map((_, i) => (
         <Card key={i}>
           <CardHeader className="pb-2">
             <Skeleton className="h-4 w-24" />
@@ -76,6 +77,25 @@ export default function Dashboard() {
 
   if (!kpi) return null
 
+  const statusData = [
+    {
+      label: statusLabel['SUCCEEDED'],
+      value: kpi.total.succeededCount,
+      color: statusColor['SUCCEEDED'],
+    },
+    { label: statusLabel['FAILED'], value: kpi.total.failedCount, color: statusColor['FAILED'] },
+    {
+      label: statusLabel['CANCELED'],
+      value: kpi.total.canceledCount,
+      color: statusColor['CANCELED'],
+    },
+    {
+      label: statusLabel['REFUNDED'],
+      value: kpi.total.refundedCount,
+      color: statusColor['REFUNDED'],
+    },
+  ]
+
   return (
     <div className="p-8">
       <div className="mb-6 flex items-center justify-between">
@@ -111,7 +131,7 @@ export default function Dashboard() {
           icon={Activity}
           description="completados + fallidos + cancelados + reembolsados"
         />
-        <PaymentStatusCard total={kpi.total} />
+        <PaymentStatusCard data={statusData} />{' '}
         <AverageTicketCard
           succeededAmount={kpi.total.succeededAmount}
           succeededCount={kpi.total.succeededCount}

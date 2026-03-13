@@ -7,30 +7,8 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Separator } from '@/components/ui/separator'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
-import type { ChargeStatus } from '@/types/charge'
+import { statusClass, statusLabel } from '@/lib/charge'
 import { formatCurrency } from '@/lib/utils'
-
-const statusVariant: Record<ChargeStatus, 'default' | 'secondary' | 'destructive' | 'outline'> = {
-  SUCCEEDED: 'default',
-  FAILED: 'destructive',
-  CANCELED: 'secondary',
-  EXPIRED: 'outline',
-  REFUNDED: 'secondary',
-  PARTIALLY_REFUNDED: 'secondary',
-  AUTHORIZED: 'default',
-  PENDING: 'outline',
-}
-
-const statusLabel: Record<ChargeStatus, string> = {
-  SUCCEEDED: 'Completado',
-  FAILED: 'Fallido',
-  CANCELED: 'Cancelado',
-  EXPIRED: 'Expirado',
-  REFUNDED: 'Reembolsado',
-  PARTIALLY_REFUNDED: 'Reembolso parcial',
-  AUTHORIZED: 'Autorizado',
-  PENDING: 'Pendiente',
-}
 
 function DetailRow({ label, value }: { label: string; value: React.ReactNode }) {
   if (!value) return null
@@ -89,9 +67,7 @@ export default function PaymentDetail() {
           <h1 className="text-2xl font-bold">Detalle del pago</h1>
           <p className="font-mono text-xs text-muted-foreground">{charge.id}</p>
         </div>
-        <Badge className="ml-auto" variant={statusVariant[charge.status]}>
-          {statusLabel[charge.status]}
-        </Badge>
+        <Badge className={statusClass[charge.status]}>{statusLabel[charge.status]}</Badge>
       </div>
 
       <div className="grid gap-4 md:grid-cols-2">

@@ -1,30 +1,26 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer } from 'recharts'
-import type { KPITotal } from '@/types/kpis'
 import { PieChart as PieChartIcon } from 'lucide-react'
 
-interface PaymentStatusCardProps {
-  total: KPITotal
+export interface StatusDataPoint {
+  label: string
+  value: number
+  color: string
 }
 
-const STATUSES = [
-  { key: 'succeededCount', label: 'Completados', color: '#22c55e' },
-  { key: 'failedCount', label: 'Fallidos', color: '#ef4444' },
-  { key: 'canceledCount', label: 'Cancelados', color: '#94a3b8' },
-  { key: 'refundedCount', label: 'Reembolsados', color: '#f59e0b' },
-]
+interface PaymentStatusCardProps {
+  data: StatusDataPoint[]
+}
 
-export function PaymentStatusCard({ total }: PaymentStatusCardProps) {
-  const totalCount = STATUSES.reduce((acc, s) => acc + total[s.key as keyof KPITotal], 0)
+export function PaymentStatusCard({ data }: PaymentStatusCardProps) {
+  const totalCount = data.reduce((acc, d) => acc + d.value, 0)
 
-  const data =
+  const chartData =
     totalCount === 0
       ? [{ name: 'Sin pagos', value: 1, color: '#e2e8f0' }]
-      : STATUSES.map((s) => ({
-          name: s.label,
-          value: total[s.key as keyof KPITotal],
-          color: s.color,
-        })).filter((d) => d.value > 0)
+      : data
+          .filter((d) => d.value > 0)
+          .map((d) => ({ name: d.label, value: d.value, color: d.color }))
 
   return (
     <Card>
@@ -36,15 +32,16 @@ export function PaymentStatusCard({ total }: PaymentStatusCardProps) {
         <ResponsiveContainer width="100%" height={160} minWidth={280}>
           <PieChart>
             <Pie
-              data={data}
               cx="35%"
               cy="50%"
+              data={chartData}
+              dataKey="value"
               innerRadius={40}
               outerRadius={60}
               paddingAngle={2}
-              dataKey="value"
+              stroke="none"
             >
-              {data.map((entry, index) => (
+              {chartData.map((entry, index) => (
                 <Cell key={index} fill={entry.color} />
               ))}
             </Pie>
@@ -57,11 +54,11 @@ export function PaymentStatusCard({ total }: PaymentStatusCardProps) {
               }}
             />
             <Legend
-              layout="vertical"
               align="right"
-              verticalAlign="middle"
-              iconType="circle"
               iconSize={8}
+              iconType="circle"
+              layout="vertical"
+              verticalAlign="middle"
             />
           </PieChart>
         </ResponsiveContainer>

@@ -1,9 +1,10 @@
 import { useState } from 'react'
 import { NavLink } from 'react-router-dom'
-import { LayoutDashboard, CreditCard, Menu, X } from 'lucide-react'
+import { LayoutDashboard, CreditCard, Menu, X, Sun, Moon } from 'lucide-react'
 import { cn } from '@/lib/utils'
-import moneiLogo from '@/assets/monei-logo-color.svg'
 import { Button } from '@/components/ui/button'
+import { useTheme } from '@/hooks/useTheme'
+import moneiLogo from '@/assets/monei-logo-color.svg'
 
 const links = [
   { to: '/', label: 'Dashboard', icon: LayoutDashboard },
@@ -12,7 +13,7 @@ const links = [
 
 function NavLinks({ onClick }: { onClick?: () => void }) {
   return (
-    <nav className="flex flex-col gap-1">
+    <nav className="flex flex-col gap-2">
       {links.map(({ to, label, icon: Icon }) => (
         <NavLink
           key={to}
@@ -38,21 +39,38 @@ function NavLinks({ onClick }: { onClick?: () => void }) {
 
 export function Sidebar() {
   const [open, setOpen] = useState(false)
+  const { isDark, toggle } = useTheme()
 
   return (
     <>
       {/* Desktop sidebar */}
-      <aside className="hidden md:flex h-screen w-44 flex-col border-r bg-card px-3 py-6">
-        <img src={moneiLogo} alt="MONEI" className="mb-8 h-4" />
+      <aside className="hidden md:flex h-screen w-44 flex-col bg-card px-3 py-6">
+        <img src={moneiLogo} alt="MONEI" className="h-4 mb-10 mt-2" />
         <NavLinks />
+        <div className="mt-auto">
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={toggle}
+            className="w-full justify-start gap-3 text-muted-foreground"
+          >
+            {isDark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+            {isDark ? 'Modo claro' : 'Modo oscuro'}
+          </Button>
+        </div>
       </aside>
 
       {/* Mobile header */}
-      <header className="md:hidden fixed top-0 left-0 right-0 z-40 flex h-14 items-center justify-between border-b bg-card px-4">
-        <img src={moneiLogo} alt="MONEI" className="h-4" />
-        <Button variant="ghost" size="icon" onClick={() => setOpen(true)}>
-          <Menu className="h-5 w-5" />
-        </Button>
+      <header className="md:hidden fixed top-0 left-0 right-0 z-40 flex h-14 items-center justify-between bg-card px-4">
+        <img src={moneiLogo} alt="MONEI" className="h-5" />
+        <div className="flex items-center gap-2">
+          <Button variant="ghost" size="icon" onClick={toggle}>
+            {isDark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+          </Button>
+          <Button variant="ghost" size="icon" onClick={() => setOpen(true)}>
+            <Menu className="h-5 w-5" />
+          </Button>
+        </div>
       </header>
 
       {/* Mobile drawer overlay */}
@@ -68,7 +86,7 @@ export function Sidebar() {
         )}
       >
         <div className="mb-8 flex items-center justify-between px-3">
-          <p className="text-lg font-bold tracking-tight">MONEI</p>
+          <img src={moneiLogo} alt="MONEI" className="h-5" />
           <Button variant="ghost" size="icon" onClick={() => setOpen(false)}>
             <X className="h-4 w-4" />
           </Button>

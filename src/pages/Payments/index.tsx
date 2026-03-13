@@ -24,29 +24,8 @@ import {
 import { DateRangePicker } from '@/components/DateRangePicker'
 import type { ChargeStatus } from '@/types/charge'
 import { formatCurrency } from '@/lib/utils'
+import { statusClass, statusLabel } from '@/lib/charge'
 import { PAGE_SIZE } from '@/lib/constants'
-
-const statusVariant: Record<ChargeStatus, 'default' | 'secondary' | 'destructive' | 'outline'> = {
-  SUCCEEDED: 'default',
-  FAILED: 'destructive',
-  CANCELED: 'secondary',
-  EXPIRED: 'outline',
-  REFUNDED: 'secondary',
-  PARTIALLY_REFUNDED: 'secondary',
-  AUTHORIZED: 'default',
-  PENDING: 'outline',
-}
-
-const statusLabel: Record<ChargeStatus, string> = {
-  SUCCEEDED: 'Completado',
-  FAILED: 'Fallido',
-  CANCELED: 'Cancelado',
-  EXPIRED: 'Expirado',
-  REFUNDED: 'Reembolsado',
-  PARTIALLY_REFUNDED: 'Reembolso parcial',
-  AUTHORIZED: 'Autorizado',
-  PENDING: 'Pendiente',
-}
 
 export default function Payments() {
   const [searchParams, setSearchParams] = useSearchParams()
@@ -174,7 +153,7 @@ export default function Payments() {
                 <TableCell>{formatCurrency(charge.amount, charge.currency)}</TableCell>
                 <TableCell className="capitalize">{charge.paymentMethod?.method ?? '—'}</TableCell>
                 <TableCell>
-                  <Badge variant={statusVariant[charge.status]}>{statusLabel[charge.status]}</Badge>
+                  <Badge className={statusClass[charge.status]}>{statusLabel[charge.status]}</Badge>
                 </TableCell>
               </TableRow>
             ))

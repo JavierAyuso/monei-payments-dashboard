@@ -114,34 +114,38 @@ export default function Dashboard() {
         </Select>
       </div>
 
-      <div className="grid gap-4 md:grid-cols-2">
-        <VolumeCard
-          title="Volumen completado"
-          amount={kpi.total.succeededAmount}
-          count={kpi.total.succeededCount}
-          currency={kpi.currency}
-          icon={TrendingUp}
-          description="solo pagos completados"
-        />
-        <VolumeCard
-          title="Volumen total"
-          amount={totalVolume}
-          count={totalCount}
-          currency={kpi.currency}
-          icon={Activity}
-          description="completados + fallidos + cancelados + reembolsados"
-        />
-        <PaymentStatusCard data={statusData} />{' '}
-        <AverageTicketCard
-          succeededAmount={kpi.total.succeededAmount}
-          succeededCount={kpi.total.succeededCount}
-          currency={kpi.currency}
-        />
-        <RefundRatioCard
-          refundedAmount={kpi.total.refundedAmount}
-          succeededAmount={kpi.total.succeededAmount}
-        />
-        <SuccessRateChart data={kpi.data} range={selectedRange} />
+      <div className="flex flex-col md:flex-row gap-4 items-start">
+        <div className="flex flex-col gap-4 w-full">
+          <VolumeCard
+            title="Volumen completado"
+            amount={kpi.total.succeededAmount}
+            count={kpi.total.succeededCount}
+            currency={kpi.currency}
+            icon={TrendingUp}
+            description="solo pagos completados"
+          />
+          <PaymentStatusCard data={statusData} />
+          <RefundRatioCard
+            refundedAmount={kpi.total.refundedAmount}
+            succeededAmount={kpi.total.succeededAmount}
+          />
+        </div>
+        <div className="flex flex-col gap-4 w-full">
+          <VolumeCard
+            title="Volumen total"
+            amount={totalVolume}
+            count={totalCount}
+            currency={kpi.currency}
+            icon={Activity}
+            description="completados + fallidos + cancelados + reembolsados"
+          />
+          <AverageTicketCard
+            succeededAmount={kpi.total.succeededAmount}
+            succeededCount={kpi.total.succeededCount}
+            currency={kpi.currency}
+          />
+          <SuccessRateChart data={kpi.data} range={selectedRange} />
+        </div>
       </div>
     </div>
   )
